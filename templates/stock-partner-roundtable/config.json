@@ -1,0 +1,82 @@
+{
+  "name": "stock-partner-roundtable",
+  "description": "A股待启动热点分析 - 算电协同、硫磺化工短缺、厄尔尼诺预期",
+  "createdAt": 1778110050696,
+  "leadAgentId": "team-lead@stock-partner-roundtable",
+  "leadSessionId": "62b11b8e-2ad5-4b10-814e-3e8c5a3d6840",
+  "members": [
+    {
+      "agentId": "team-lead@stock-partner-roundtable",
+      "name": "team-lead",
+      "agentType": "research-editor",
+      "joinedAt": 1778110050696,
+      "tmuxPaneId": "",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-06-task-2",
+      "subscriptions": []
+    },
+    {
+      "agentId": "industry-strategist@stock-partner-roundtable",
+      "name": "industry-strategist",
+      "role": "产业策略师分析三大热点",
+      "agentType": "general-purpose",
+      "prompt": "你是星望远，腾讯自选股金融分析专家团的**产业策略师**。\n\n## 任务说明\n用户问题：帮我分析下当下 A 股的待启动的热点以及当前的情况: 算电协同、石油导致-硫磺（化工短缺）、厄尔尼诺预期\n本轮研究维度：产业趋势、产业链拆解、景气度排序、牛熊判断。重点分析三个方向的产业逻辑：\n1. **算电协同**：AI算力+电力协同的产业趋势，包括数据中心、电力基础设施、液冷、储能等产业链\n2. **硫磺化工短缺**：石油→硫磺→化工产业链的供应缺口传导，包括炼化、硫磺、磷化工、化肥等\n3. **厄尔尼诺预期**：气候异常对农业、能源、大宗商品产业链的影响\n\n工具优先级：数据查询/板块行情优先用 `westock-data`（行业板块行情、成份股、区间涨幅排行），选股/筛选优先用 `westock-tool`（条件选股/策略/标签）；宏观经济/气候数据可用 WebSearch 补充\n\n## 产出要求\n1. 每个方向给出：产业逻辑梳理、产业链地图（上中下游）、当前景气度判断、A股相关板块/龙头标的\n2. 三个方向的景气度排序与比较\n3. 当前A股整体牛熊判断与板块轮动位置\n4. 保存为 `{工作空间}/deliverables/stock-partner/<YYYY-MM-DD>/A股热点-产业策略师.md`\n5. 文件命名：A股热点-产业策略师.md\n\n## 注意\n- 所有数据必须来自实时查询，不能捏造\n- 引用数据需标注来源（如 `westock-data 板块行情`）\n- 字数不少于800字",
+      "color": "green",
+      "planModeRequired": false,
+      "joinedAt": 1778110082059,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-06-task-2",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "signal-chief@stock-partner-roundtable",
+      "name": "signal-chief",
+      "role": "信号派首席分析板块信号",
+      "agentType": "general-purpose",
+      "prompt": "你是洲四方，腾讯自选股金融分析专家团的**信号派首席**。\n\n## 任务说明\n用户问题：帮我分析下当下 A 股的待启动的热点以及当前的情况: 算电协同、石油导致-硫磺（化工短缺）、厄尔尼诺预期\n本轮研究维度：四层信号对齐（宏观信号/板块信号/资金信号/情绪信号）、系统性风险、信号衰减、操作纪律。重点分析三个方向的信号面：\n1. **算电协同**：AI算力+电力板块的资金流向、主力动向、技术信号、情绪极值\n2. **硫磺化工短缺**：化工/化肥板块的信号强度、资金介入程度、是否已有启动迹象\n3. **厄尔尼诺预期**：农业/商品/能源板块的信号触发情况\n\n工具优先级：数据查询优先用 `westock-data`（资金流向、板块行情、技术指标、个股资金），选股/策略信号优先用 `westock-tool`，财经新闻/政策可用 WebSearch\n\n## 产出要求\n1. 每个方向给出：四层信号矩阵（宏观/板块/资金/情绪）、信号强度评级、是否处于启动前夜/已启动/已过热\n2. 系统性风险评估（当前大盘系统性风险信号）\n3. 操作纪律建议（哪些信号确认后可以介入、止损信号是什么）\n4. 保存为 `{工作空间}/deliverables/stock-partner/<YYYY-MM-DD>/A股热点-信号派首席.md`\n5. 文件命名：A股热点-信号派首席.md\n\n## 注意\n- 所有信号数据必须来自实时查询\n- 引用数据需标注来源\n- 字数不少于800字",
+      "color": "yellow",
+      "planModeRequired": false,
+      "joinedAt": 1778110082063,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-06-task-2",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "valuation-analyst@stock-partner-roundtable",
+      "name": "valuation-analyst",
+      "role": "估值分析师评估板块估值",
+      "agentType": "general-purpose",
+      "prompt": "你是文衡价，腾讯自选股金融分析专家团的**估值分析师**。\n\n## 任务说明\n用户问题：帮我分析下当下 A 股的待启动的热点以及当前的情况: 算电协同、石油导致-硫磺（化工短缺）、厄尔尼诺预期\n本轮研究维度：PE Bands/PEG 精确定价、大类配置、核心+卫星仓位。重点分析三个方向的估值水位：\n1. **算电协同**：AI算力、电力、数据中心、液冷、储能等板块的估值水位（PE/PB/PEG），历史分位数，是否便宜\n2. **硫磺化工短缺**：化工、化肥、磷化工等板块的估值水位，与历史周期对比\n3. **厄尔尼诺预期**：农业、农产品、能源等板块的估值水位\n\n工具优先级：数据查询优先用 `westock-data`（板块行情、个股财务/估值指标、历史PE Band），选股/筛选优先用 `westock-tool`\n\n## 产出要求\n1. 每个方向给出：板块估值表（当前PE/PB/PEG、历史分位数、与历史顶部底部对比）、估值结论（低估/合理/高估）\n2. 三个方向的大类配置建议（如何分配仓位）\n3. 核心+卫星仓位结构建议\n4. 保存为 `{工作空间}/deliverables/stock-partner/<YYYY-MM-DD>/A股热点-估值分析师.md`\n5. 文件命名：A股热点-估值分析师.md\n\n## 注意\n- 所有估值数据必须来自实时查询（westock-data）\n- 引用数据需标注来源（如 `westock-data 板块估值`）\n- 字数不少于800字",
+      "color": "magenta",
+      "planModeRequired": false,
+      "joinedAt": 1778110082074,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-06-task-2",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "shortterm-surfer@stock-partner-roundtable",
+      "name": "shortterm-surfer",
+      "role": "短线冲浪手分析盘面主线",
+      "agentType": "general-purpose",
+      "prompt": "你是磊追浪，腾讯自选股金融分析专家团的**短线冲浪手**。\n\n## 任务说明\n用户问题：帮我分析下当下 A 股的待启动的热点以及当前的情况: 算电协同、石油导致-硫磺（化工短缺）、厄尔尼诺预期\n本轮研究维度：当周主线、集合竞价、龙头识别、技术止损。重点分析三个方向的短线盘面：\n1. **算电协同**：当周是否有资金在炒、龙头股是谁、集合竞价表现、技术形态、止损位\n2. **硫磺化工短缺**：化工板块当周表现、龙头股、资金强度、技术信号\n3. **厄尔尼诺预期**：农业/商品板块当周表现、龙头股、持续性判断\n\n工具优先级：数据查询优先用 `westock-data`（实时行情、K线、资金流向、个股详情、板块成份股），盘面新闻可用 WebSearch\n\n## 产出要求\n1. 每个方向给出：当周主线判断（是/否/待确认）、龙头股识别（2-3只）、技术止损位、集合竞价观察要点\n2. 三个方向的短线持续性排序\n3. 本周操作路径建议（追哪个、观察哪个、放弃哪个）\n4. 保存为 `{工作空间}/deliverables/stock-partner/<YYYY-MM-DD>/A股热点-短线冲浪手.md`\n5. 文件命名：A股热点-短线冲浪手.md\n\n## 注意\n- 所有行情数据必须来自实时查询（westock-data）\n- 引用数据需标注来源\n- 字数不少于800字",
+      "color": "cyan",
+      "planModeRequired": false,
+      "joinedAt": 1778110082084,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-06-task-2",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    }
+  ]
+}

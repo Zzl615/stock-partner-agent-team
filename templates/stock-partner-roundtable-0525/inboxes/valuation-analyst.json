@@ -1,0 +1,9 @@
+[
+  {
+    "from": "team-lead",
+    "text": "{\"type\":\"shutdown_request\",\"request_id\":\"shutdown-1779723286709\",\"reason\":\"任务已完成，圆桌报告已汇编输出。感谢你的专业分析！\",\"from\":\"team-lead\",\"timestamp\":\"2026-05-25T15:34:46.709Z\"}",
+    "summary": "Shutdown request for valuation-analyst",
+    "timestamp": "2026-05-25T15:34:46.709Z",
+    "read": true
+  }
+]

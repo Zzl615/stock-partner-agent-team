@@ -1,0 +1,16 @@
+[
+  {
+    "from": "team-lead",
+    "text": "你的所有任务（#1-#5）已确认完成，报告已收到。请保持待机状态，等待其他成员完成后我会统一通知大家。",
+    "summary": "短线任务完成确认，保持待机",
+    "timestamp": "2026-05-06T23:32:44.176Z",
+    "read": true
+  },
+  {
+    "from": "team-lead",
+    "text": "{\"type\":\"shutdown_request\",\"request_id\":\"shutdown-1778111285399\",\"reason\":\"所有任务已完成，圆桌报告已生成。请关闭并退出。\",\"from\":\"team-lead\",\"timestamp\":\"2026-05-06T23:48:05.399Z\"}",
+    "summary": "Shutdown request for shortterm-surfer",
+    "timestamp": "2026-05-06T23:48:05.399Z",
+    "read": true
+  }
+]

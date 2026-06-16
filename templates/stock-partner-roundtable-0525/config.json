@@ -1,0 +1,98 @@
+{
+  "name": "stock-partner-roundtable-0525",
+  "description": "A股指数ETF + 科创50 估值与入场时机圆桌研究，2026-05-25",
+  "createdAt": 1779722359750,
+  "leadAgentId": "team-lead@stock-partner-roundtable-0525",
+  "leadSessionId": "2fd3e5e4-e1f8-48ba-8834-fc6fdd697ca0",
+  "members": [
+    {
+      "agentId": "team-lead@stock-partner-roundtable-0525",
+      "name": "team-lead",
+      "agentType": "yuan-editor",
+      "joinedAt": 1779722359750,
+      "tmuxPaneId": "",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-25-task-7",
+      "subscriptions": []
+    },
+    {
+      "agentId": "industry-strategist@stock-partner-roundtable-0525",
+      "name": "industry-strategist",
+      "role": "产业策略师分析A股宏观景气度与科创板",
+      "agentType": "industry-strategist",
+      "prompt": "用户问题：A股指数ETF + 科创50的估值与入场时机\n\n本轮研究维度：产业趋势 / A股宏观景气度 / 科创板产业卡位 / 牛熊判断\n- 当前A股整体宏观景气度判断（PMI、信用周期、政策方向）\n- 科创50成分股的产业结构（半导体/生物医药/新能源/AI等）景气度排序\n- 科创50 vs 沪深300：哪个更处在产业周期上升段？\n- 当前是否进入指数ETF的牛市配置窗口？\n- 宏观层面阻力与催化因素\n\n工具优先级：数据查询/指数详情优先用 `westock-data`（行情/K线/财务/资金），行业/板块景气优先用 `westock-data`；联网搜索宏观政策用 WebSearch\n产出方式：将完整 md 报告内容直接回传给主理人（不写本地文件）",
+      "color": "green",
+      "planModeRequired": false,
+      "joinedAt": 1779722396725,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-25-task-7",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "valuation-analyst@stock-partner-roundtable-0525",
+      "name": "valuation-analyst",
+      "role": "估值分析师分析A股指数ETF+科创50估值",
+      "agentType": "valuation-analyst",
+      "prompt": "用户问题：A股指数ETF + 科创50的估值与入场时机\n\n本轮研究维度：PE Bands 精确定价 / PEG 分档 / 宏观配置水位。\n- 分析对象：沪深300（000300）、中证500（000905）、科创50（000688）\n- 核查当前 PE/PB 估值水位（分位数）\n- PE Bands 历史区间分档（极度低估 / 低估 / 合理 / 高估 / 泡沫）\n- 三个指数的 PEG 情况\n- 核心+卫星仓位建议逻辑（按风险偏好区分）\n- 当前宏观配置环境对指数 ETF 的影响\n\n工具优先级：数据查询/个股详情优先用 `westock-data`，选股/筛选优先用 `westock-tool`\n产出方式：将完整 md 报告内容直接回传给主理人（不写本地文件）",
+      "color": "yellow",
+      "planModeRequired": false,
+      "joinedAt": 1779722396735,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-25-task-7",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "signal-chief@stock-partner-roundtable-0525",
+      "name": "signal-chief",
+      "role": "信号派首席做系统性风险与资金信号分析",
+      "agentType": "signal-chief",
+      "prompt": "用户问题：A股指数ETF + 科创50的估值与入场时机\n\n本轮研究维度：四层信号对齐（宏观/资金/技术/情绪）/ 系统性风险预警 / 周月级别趋势信号\n- 沪深300（000300）和科创50（000688）当前的资金流向（北向、主力、融资盘）\n- 四层信号矩阵对齐情况：宏观面/资金面/技术面/情绪面分别在哪个状态？\n- 当前是否有系统性风险信号（流动性收紧、外部冲击、信用风险等）\n- 卖出时机与操作纪律：什么信号出现应该减仓？\n- 当前月线/周线趋势判断\n\n工具优先级：行情/资金流向用 `westock-data`，联网搜索政策与外部风险用 WebSearch\n产出方式：将完整 md 报告内容直接回传给主理人（不写本地文件）",
+      "color": "magenta",
+      "planModeRequired": false,
+      "joinedAt": 1779722396739,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-25-task-7",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "contrarian-investor@stock-partner-roundtable-0525",
+      "name": "contrarian-investor",
+      "role": "逆向投资人判断情绪极值与分批建仓逻辑",
+      "agentType": "contrarian-investor",
+      "prompt": "用户问题：A股指数ETF + 科创50的估值与入场时机\n\n本轮研究维度：情绪极值判断 / 历史估值支撑位 / 分批建仓框架\n- 当前市场情绪处于哪个极值区间（恐慌/贪婪/中性）？\n- 沪深300和科创50的历史 PE 支撑位（1x标准差、2x标准差下轨）\n- 逆向框架下：当前是否是值得分批入场的时机？\n- 分批建仓的具体操作逻辑（几批、间隔、参考位）\n- 极简判断框架：只看两三个指标，现在偏多/偏空/观望？\n\n工具优先级：数据查询用 `westock-data`（行情/K线/估值），联网参考情绪指标用 WebSearch\n产出方式：将完整 md 报告内容直接回传给主理人（不写本地文件）",
+      "color": "cyan",
+      "planModeRequired": false,
+      "joinedAt": 1779722396747,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-25-task-7",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    },
+    {
+      "agentId": "shortterm-surfer@stock-partner-roundtable-0525",
+      "name": "shortterm-surfer",
+      "role": "短线冲浪手分析科创50近期盘面与技术止损",
+      "agentType": "shortterm-surfer",
+      "prompt": "用户问题：A股指数ETF + 科创50的估值与入场时机\n\n本轮研究维度：科创50近期盘面 / 技术止损位 / 当前A股短线主线 / 天级别信号\n- 科创50（000688）近期技术面：均线结构、成交量、MACD、RSI\n- 当前科创50重要技术支撑位与阻力位\n- 科创50 ETF（588000或588050）最近的集合竞价与盘中走势特征\n- 当前A股短线主线（本周什么板块/概念最热？）\n- 技术止损位设置（短线入场后应在哪里止损）\n- 什么时候适合追，什么时候观望？\n\n工具优先级：行情/K线用 `westock-data`，选股策略用 `westock-tool`，联网补充消息面用 WebSearch\n产出方式：将完整 md 报告内容直接回传给主理人（不写本地文件）",
+      "color": "red",
+      "planModeRequired": false,
+      "joinedAt": 1779722396753,
+      "tmuxPaneId": "in-process",
+      "cwd": "/Users/noaghzil/WorkBuddy/2026-05-25-task-7",
+      "subscriptions": [
+        "*"
+      ],
+      "backendType": "in-process"
+    }
+  ]
+}
