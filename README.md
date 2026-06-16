@@ -1,106 +1,108 @@
-# Stock-Partner Multi-Agent Roundtable Team (Python 独立运行项目)
+# Stock-Partner Multi-Agent Roundtable Team (Python Standalone Project)
 
-本项目是基于 WorkBuddy 的 **腾讯自选股股票投研专家团** 编排机制提取并独立封装的 Python 智能体团队项目。它通过并发调度 6 位不同投资维度的投研专家进行圆桌会商，提供专业的多视角个股/板块分析报告，并输出高保真的可视化 HTML 研报。
+This project is a standalone Python implementation of the **Tencent Stock-Partner Roundtable Expert Team** (自选股投研圆桌专家团) extracted and decoupled from WorkBuddy. It orchestrates a team of 6 expert sub-agents with different investment perspectives for collaborative stock analysis, producing professional multi-perspective markdown reports and high-fidelity, visually rich HTML reports.
 
----
-
-## 1. 项目架构说明 (Project Architecture)
-
-整个项目的架构设计如下，各模块职责分工明确：
-
-* **核心调度与接口 (Python)**：
-  * `main.py`：命令行入口。支持直接输入查询问题或股票代码，也支持通过 `--template` 指定预设的历史圆桌配置一键运行。
-  * `orchestrator.py`：团队会商调度核心。利用 Python `ThreadPoolExecutor` 并发拉起 6 位子专家的 ReAct 循环进行分析，汇总各专家 Markdown 报告后，交由投研主编（主理人）进行共识、分歧提炼，产出圆桌综合报告。
-  * `llm.py`：统一大模型客户端。封装了 ReAct 工具调用循环（ReAct Loop），能够自动解析并响应智能体的工具调用请求；全面兼容 **Gemini API**（支持 native SDK 与 OpenAI 兼容接口）以及 **OpenAI API**。
-  * `tools.py`：工具执行封装。将 Node.js 命令转化为 Python 调用函数，通过 `subprocess` 执行底层的行情与选股 CLI 工具。
-  * `config.py`：配置及路径管理中心。
-* **迁移资产 (Assets)**：
-  * `agents/`：从 `.workbuddy` 系统迁移出来的 7 位专家角色的核心 Prompt 定义库：
-    * `stock-partner-lead` (圆汇众 · 投研主编)
-    * `industry-strategist` (星望远 · 产业策略师)
-    * `signal-chief` (洲四方 · 信号派首席)
-    * `valuation-analyst` (文衡价 · 估值分析师)
-    * `contrarian-investor` (坤候底 · 逆向投资人)
-    * `fundamental-researcher` (钊审财 · 财报研究员)
-    * `shortterm-surfer` (磊追浪 · 短线冲浪手)
-  * `skills/`：
-    * `westock-data` 与 `westock-tool`：包含了自选股实时行情、分时、K线、财务数据查询以及 40+ 预置选股策略的 Node.js 客户端（独立包含了 node_modules 运行环境）。
-    * `md-to-html`：包含可视化报告渲染外壳 `shell.html`、CSS 样式规范，以及 Python 合成与头像内嵌脚本。
-  * `avatars/`：圆桌主理人及 6 位专家的图片头像。
-  * `templates/`：备份自飞书/WorkBuddy 会商历史的 3 个典型圆桌任务模板，包含了对应的成员 inbox 信息与任务上下文。
+*Note: For the Chinese version of this documentation, please see [README_zh.md](README_zh.md).*
 
 ---
 
-## 2. 环境配置与安装 (Environment Setup)
+## 1. Project Architecture
 
-### 2.1. 依赖要求
-- **Python** >= 3.8 (推荐 Python 3.10+)
-- **Node.js** >= 18 (数据查询工具运行所需)
+The architecture is designed as follows with modular separation of concerns:
 
-### 2.2. 一键安装
-项目内置了自动化的安装脚本，在终端中进入项目目录直接执行即可：
+* **Core Orchestration & Interfaces (Python)**:
+  * `main.py`: CLI entrypoint. Supports direct queries and stock code inputs, as well as template-based execution via `--template`.
+  * `orchestrator.py`: The team orchestration engine. Employs `ThreadPoolExecutor` to run the 6 sub-agents' ReAct loops in parallel, aggregates their reports, and leverages the Roundtable Lead (Research Editor) to consolidate findings into a final roundtable report.
+  * `llm.py`: Unified LLM client. Implements a ReAct loop to intercept and execute tools called by the agents. Fully compatible with **Gemini API** (supports native SDK and OpenAI-compatible endpoint) and **OpenAI API**.
+  * `tools.py`: Tool execution wrapper. Converts Node.js scripts into Python callable functions executed via `subprocess`.
+  * `config.py`: Core configuration and path loader.
+* **Decoupled Assets**:
+  * `agents/`: Decoupled prompt files for all 7 agents:
+    * `stock-partner-lead` (Roundtable Lead / Research Editor)
+    * `industry-strategist` (Industry Strategist)
+    * `signal-chief` (Signal Chief)
+    * `valuation-analyst` (Valuation Analyst)
+    * `contrarian-investor` (Contrarian Investor)
+    * `fundamental-researcher` (Fundamental Researcher)
+    * `shortterm-surfer` (Shortterm Surfer)
+  * `skills/`:
+    * `westock-data` & `westock-tool`: A self-contained Node.js client (with its own `node_modules` environment) offering A-share, HK-share, and US stock real-time quotes, K-lines, financials, and 40+ quantitative strategy filters.
+    * `md-to-html`: Visual HTML report renderer containing `shell.html`, styling rules, and Python scripts to embed images and assemble reports.
+  * `avatars/`: Avatar images for all analysts.
+  * `templates/`: Config templates for 3 historical roundtables containing inbox messages and task contexts.
+
+---
+
+## 2. Environment Setup
+
+### 2.1. Prerequisites
+- **Python** >= 3.8 (Recommend Python 3.10+)
+- **Node.js** >= 18 (Required for quantitative skills)
+
+### 2.2. One-click Installation
+Run the automated setup script in your terminal:
 ```bash
 ./setup.sh
 ```
-该脚本会自动：
-1. 创建 Python 虚拟环境 `.venv`。
-2. 激活虚拟环境并安装 Python 依赖（`google-generativeai`、`openai`、`pandas` 等）。
-3. 安装 Node.js 行情工具依赖。
-4. 基于 `.env.example` 生成 `.env` 配置文件。
+This script will:
+1. Initialize a Python virtual environment (`.venv`).
+2. Install Python dependencies (`google-generativeai`, `openai`, `pandas`, etc.).
+3. Install Node dependencies for stock-market tools.
+4. Copy `.env.example` to `.env` if not already present.
 
 ---
 
-## 3. 配置与运行指南 (Configuration & Running)
+## 3. Configuration & Execution Guide
 
-### 3.1. 填写大模型密钥
-请使用编辑器打开根目录下的 `.env` 文件，并根据您使用的 LLM 厂商填写 API 密钥（默认首选 Gemini）：
+### 3.1. Configure API Keys
+Edit the `.env` file in the root directory to set your provider and API key (Gemini is the default):
 ```ini
 LLM_PROVIDER=gemini
 
 # API Keys
-GEMINI_API_KEY=您的Gemini_API_Key
+GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-1.5-pro
 
-# 如果使用 OpenAI，请配置如下：
+# For OpenAI:
 # LLM_PROVIDER=openai
-# OPENAI_API_KEY=您的OpenAI_API_Key
+# OPENAI_API_KEY=your_openai_api_key_here
 # OPENAI_MODEL=gpt-4o
 ```
 
-### 3.2. 运行会商服务
+### 3.2. Running the Roundtable
 
-首先请确保处于 Python 虚拟环境中：
+First, activate the virtual environment:
 ```bash
 source .venv/bin/activate
 ```
 
-#### 选项 A：使用历史会商模板运行 (推荐测试)
-查看所有可用的历史任务模板：
+#### Option A: Run Using Historical Templates (Recommended for Testing)
+List all available templates:
 ```bash
 python main.py --list-templates
 ```
-使用特定的模板一键运行投研分析（例如运行持仓组合诊断）：
+Run using a specific template:
 ```bash
 python main.py --template stock-partner-roundtable-2
 ```
 
-#### 选项 B：全新发起个股/板块分析
-提供您关注的问题和股票代码：
+#### Option B: Start a New Analysis Query
+Provide custom analysis query text and stock ticker codes:
 ```bash
-python main.py --query "分析中国船舶与宁德时代的最新走势" --code 600150,300750
+python main.py --query "Analyze the latest trend for CATL and BYD" --code 300750,sz002594
 ```
 
-#### 选项 C：指定专家上场（节省 Token 流量）
-如果您只关心估值与资金，可以通过 `--agents` 仅激活特定分析师：
+#### Option C: Activate Specific Agents (Save Token/Cost)
+If you only care about valuation and signals, run with selected sub-agents:
 ```bash
-python main.py --query "分析中国船舶" --code 600150 --agents "valuation-analyst,signal-chief"
+python main.py --query "Analyze BYD" --code sz002594 --agents "valuation-analyst,signal-chief"
 ```
 
 ---
 
-## 4. 报告产出与归档 (Reports Output)
+## 4. Reports Output
 
-每次圆桌分析运行成功后，系统会自动在根目录下的 `./output/<日期>/` 文件夹中输出以下内容：
-1. **分析师独立报告**：各专家的独立分析过程文档，命名格式为 `<主题>-<专家头衔>.md`（如 `600150-估值分析师.md`）。
-2. **圆桌共识研报**：由主理人汇总提炼的 `<主题>-圆桌报告.md`。
-3. **高保真 HTML 可视化研报**：`<主题>-圆桌报告.html`（内嵌了各分析师的专属头像与精美的排版样式，完全独立，双击即可在浏览器中完美查看，适于转发分享）。
+After a successful run, reports will be archived under the `./output/<YYYY-MM-DD>/` directory:
+1. **Individual Expert Reports**: Named as `<Symbol>-<Role>.md` (e.g., `300750-估值分析师.md`).
+2. **Roundtable Consensus Report**: Gathers findings into `<Symbol>-圆桌报告.md`.
+3. **High-Fidelity Visual HTML Report**: `<Symbol>-圆桌报告.html` (Complete, self-contained report containing styles and embedded base64 avatars, ready to view in any browser).
