@@ -16,3 +16,4 @@ output/
 .DS_Store
 *.body.html
 /tmp/
+.python-version
