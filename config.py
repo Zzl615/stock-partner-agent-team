@@ -11,11 +11,9 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()
 
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-pro")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
-ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-latest")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 # Paths setup
 NODE_PATH = os.getenv("NODE_PATH", "node")
