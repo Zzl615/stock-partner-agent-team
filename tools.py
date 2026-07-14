@@ -2,17 +2,67 @@ import subprocess
 import shlex
 import os
 import sys
+import time
 import config
 
-def execute_node_script(script_path, args_str):
+def normalize_stock_code(code: str) -> str:
+    lowered = code.lower()
+    if lowered.startswith(("sh", "sz", "hk", "bj", "us")):
+        return code
+    if code.isdigit() and len(code) == 6:
+        if code.startswith(("6", "5", "9")):
+            return f"sh{code}"
+        if code.startswith(("0", "1", "2", "3")):
+            return f"sz{code}"
+    return code
+
+def normalize_westock_data_command(command: str) -> str:
+    """
+    Normalize common LLM-generated shorthand into supported westock-data CLI syntax.
+    """
+    args = shlex.split(command)
+    if not args:
+        return command
+
+    normalized = list(args)
+    if normalized[0] == "fund":
+        normalized[0] = "asfund"
+        if len(normalized) > 1:
+            normalized[1] = normalize_stock_code(normalized[1])
+
+    if normalized[0] == "kline" and len(normalized) >= 5 and not normalized[2].startswith("--"):
+        normalized = [
+            normalized[0],
+            normalize_stock_code(normalized[1]),
+            "--period",
+            normalized[2],
+            "--limit",
+            normalized[3],
+            "--fq",
+            normalized[4],
+            *normalized[5:],
+        ]
+
+    if normalized[0] == "finance" and len(normalized) == 3 and normalized[2].isdigit():
+        normalized = [normalized[0], normalize_stock_code(normalized[1]), "--num", normalized[2]]
+
+    if normalized[0] == "technical" and len(normalized) == 3 and not normalized[2].startswith("--"):
+        normalized = [normalized[0], normalize_stock_code(normalized[1]), "--group", normalized[2]]
+
+    return shlex.join(normalized)
+
+def execute_node_script(script_path, args_str, tool_name=None):
     """
     Executes a Node.js script with the given arguments.
     Returns the stdout as markdown string, or error message on failure.
     """
+    label = tool_name or os.path.basename(script_path)
+    started_at = time.perf_counter()
     try:
         # Split command line arguments respecting quotes
         args = shlex.split(args_str)
         cmd = [config.NODE_PATH, script_path] + args
+        print(f"[Tool Exec] {label}: {' '.join(shlex.quote(part) for part in cmd)}")
         
         # Run subprocess
         result = subprocess.run(
@@ -22,15 +72,23 @@ def execute_node_script(script_path, args_str):
             text=True,
             encoding="utf-8"
         )
+        elapsed_ms = round((time.perf_counter() - started_at) * 1000, 2)
+        stdout_len = len(result.stdout or "")
+        stderr_len = len(result.stderr or "")
+        print(
+            f"[Tool Result] {label}: returncode={result.returncode}, elapsed_ms={elapsed_ms}, "
+            f"stdout_chars={stdout_len}, stderr_chars={stderr_len}"
+        )
         
         if result.returncode != 0:
             err_msg = result.stderr.strip()
-            print(f"Error running Node script {os.path.basename(script_path)}: {err_msg}", file=sys.stderr)
+            print(f"[Tool Error] {label}: {err_msg}", file=sys.stderr)
             return f"**Error executing tool:**\n```\n{err_msg}\n```"
             
         return result.stdout
     except Exception as e:
-        print(f"Exception running Node script {os.path.basename(script_path)}: {e}", file=sys.stderr)
+        elapsed_ms = round((time.perf_counter() - started_at) * 1000, 2)
+        print(f"[Tool Exception] {label}: elapsed_ms={elapsed_ms}, error={e}", file=sys.stderr)
         return f"**Exception executing tool:**\n```\n{e}\n```"
 
 def query_westock_data(command: str) -> str:
@@ -38,8 +96,11 @@ def query_westock_data(command: str) -> str:
     Query stock quotes, financials, or macro data using westock-data.
     E.g., query_westock_data("quote sh600519") or query_westock_data("finance sh600519 --num 4")
     """
-    print(f"[Tool Call] westock-data {command}")
-    return execute_node_script(config.WESTOCK_DATA_SCRIPT, command)
+    normalized_command = normalize_westock_data_command(command)
+    if normalized_command != command:
+        print(f"[Tool Normalize] westock-data: {command} -> {normalized_command}")
+    print(f"[Tool Call] westock-data {normalized_command}")
+    return execute_node_script(config.WESTOCK_DATA_SCRIPT, normalized_command, tool_name="westock-data")
 
 def query_westock_tool(command: str) -> str:
     """
@@ -47,7 +108,7 @@ def query_westock_tool(command: str) -> str:
     E.g., query_westock_tool("strategy macd_golden") or query_westock_tool("filter --preset LowPE")
     """
     print(f"[Tool Call] westock-tool {command}")
-    return execute_node_script(config.WESTOCK_TOOL_SCRIPT, command)
+    return execute_node_script(config.WESTOCK_TOOL_SCRIPT, command, tool_name="westock-tool")
 
 def render_html_report(md_file_path: str, html_file_path: str, title: str, date_str: str) -> bool:
     """
