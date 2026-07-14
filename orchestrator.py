@@ -164,6 +164,48 @@ def run_roundtable_lead(user_query, sub_reports, stock_codes=None):
         
     return md_report, body_html
 
+def render_html_report(body_html, html_fpath, title, date_str):
+    """
+    Renders a body HTML fragment into a complete report. Returns the HTML path on success.
+    """
+    output_dir = os.path.dirname(html_fpath)
+    body_fpath = os.path.splitext(html_fpath)[0] + ".body.html"
+    with open(body_fpath, "w", encoding="utf-8") as f:
+        f.write(body_html)
+
+    render_script = os.path.join(config.SKILLS_DIR, "md-to-html", "scripts", "render.py")
+    cmd = [
+        sys.executable,
+        render_script,
+        body_fpath,
+        html_fpath,
+        f"--title={title}",
+        f"--date={date_str}",
+        "--keep-body",
+    ]
+
+    print(f"[*] Rendering HTML report using render.py...")
+    print(f"[*] Render command: {' '.join(cmd)}")
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8")
+    if result.stdout:
+        print(f"[render stdout]\n{result.stdout.strip()}")
+    if result.returncode == 0:
+        print(f"[✓] Saved HTML report: {html_fpath}")
+        try:
+            os.remove(body_fpath)
+        except OSError as exc:
+            print(f"[!] Warning: failed to clean body fragment {body_fpath}: {exc}", file=sys.stderr)
+        return html_fpath
+
+    if result.stderr:
+        print(f"[render stderr]\n{result.stderr.strip()}", file=sys.stderr)
+    print(
+        f"[✗] Failed to render HTML report: returncode={result.returncode}. "
+        f"Body fragment kept for debugging: {body_fpath}",
+        file=sys.stderr,
+    )
+    return None
+
 def run_team_roundtable(user_query, active_agents=None, output_dir=None):
     """
     Orchestrates the entire roundtable team.
@@ -230,35 +272,20 @@ def run_team_roundtable(user_query, active_agents=None, output_dir=None):
     
     # Render and save HTML report if body html was generated
     html_fpath = os.path.join(output_dir, f"{theme}-圆桌报告.html")
+    html_report = None
     if body_html:
-        body_fpath = os.path.join(output_dir, f"{theme}-圆桌报告.body.html")
-        with open(body_fpath, "w", encoding="utf-8") as f:
-            f.write(body_html)
-            
-        print(f"[*] Rendering HTML report using render.py...")
-        # Run subprocess to execute render.py
-        # E.g. python3 render.py <body_file> <output_html> --title="A股指数ETF+科创50" --date=YYYY-MM-DD
-        render_script = os.path.join(config.SKILLS_DIR, "md-to-html", "scripts", "render.py")
-        cmd = [
-            sys.executable,
-            render_script,
-            body_fpath,
-            html_fpath,
-            f"--title={theme}自选股投研圆桌报告",
-            f"--date={date_str}"
-        ]
-        
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8")
-        if result.returncode == 0:
-            print(f"[✓] Saved HTML report: {html_fpath}")
-        else:
-            print(f"[✗] Failed to render HTML report: {result.stderr}", file=sys.stderr)
+        html_report = render_html_report(
+            body_html=body_html,
+            html_fpath=html_fpath,
+            title=f"{theme}自选股投研圆桌报告",
+            date_str=date_str,
+        )
     else:
         print("[!] Warning: Lead agent did not output start/end tags for body HTML. Skipping HTML rendering.")
         
     return {
         "output_dir": output_dir,
         "md_report": md_fpath,
-        "html_report": html_fpath if body_html else None,
+        "html_report": html_report,
         "sub_reports": sub_reports
     }
